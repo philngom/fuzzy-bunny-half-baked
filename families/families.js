@@ -5,6 +5,8 @@ import {
     logout,
 } from '../fetch-utils.js';
 
+import { renderBunny } from '../render-utils.js';
+
 checkAuth();
 
 const familiesEl = document.querySelector('.families-container');
@@ -36,9 +38,7 @@ async function displayFamilies() {
         familyNameEl.textContent = family.name;
         // for each of this family's bunnies
         for (let bunny of family.fuzzy_bunnies) {
-            const bunnyEl = document.createElement('p');
-            bunnyEl.classList.add('bunny');
-            bunnyEl.textContent = bunny.name;
+            const bunnyEl = renderBunny(bunny);
 
             bunnyEl.addEventListener('click', async() => {
                 await deleteBunny(bunny.id);
