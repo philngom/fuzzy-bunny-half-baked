@@ -9,21 +9,33 @@ export async function getUser() {
 
 export async function getFamilies() {
     // fetch all families and their bunnies
+    const response = await client
+        .from('loving_families')
+        .select(`*, fuzzy_bunnies (*)`);
 
-    return checkError(response);    
+    return checkError(response);
 }
 
 export async function deleteBunny(id) {
     // delete a single bunny using the id argument
+    const response = await client
+        .from('fuzzy_bunnies')
+        .delete()
+        .match({ id: id });
 
-    return checkError(response);    
+    return checkError(response);
 }
 
 
 export async function createBunny(bunny) {
     // create a bunny using the bunny argument
+    console.log(bunny);
+    const response = await client
+        .from('fuzzy_bunnies')
+        .insert([bunny])
+        .single();
 
-    return checkError(response);    
+    return checkError(response);
 }
 
 
@@ -31,7 +43,7 @@ export async function createBunny(bunny) {
 export async function checkAuth() {
     const user = await getUser();
 
-    if (!user) location.replace('../'); 
+    if (!user) location.replace('../');
 }
 
 export async function redirectIfLoggedIn() {
@@ -42,7 +54,7 @@ export async function redirectIfLoggedIn() {
 
 export async function signupUser(email, password){
     const response = await client.auth.signUp({ email, password });
-    
+
     return response.user;
 }
 
